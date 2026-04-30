@@ -1,0 +1,24 @@
+<div style="padding: 2rem;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <h1 style="color: #2c3e50;">📟 Dispositivos</h1>
+    <button (click)="cargarDispositivos()" style="background: #667eea; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">🔄 Actualizar</button>
+  </div>
+  
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
+    <div *ngFor="let d of dispositivos" style="background: white; border-radius: 15px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      <div style="display: flex; justify-content: space-between; align-items: start;">
+        <h3 style="color: #667eea; margin: 0;">{{ d.nombre }}</h3>
+        <span [style.background]="d.conectado ? '#d4edda' : '#f8d7da'" 
+              [style.color]="d.conectado ? '#155724' : '#721c24'"
+              style="padding: 0.25rem 0.5rem; border-radius: 5px; font-size: 0.7rem;">
+          {{ d.conectado ? '🟢 Conectado' : '🔴 Desconectado' }}
+        </span>
+      </div>
+      <p style="color: #666; margin: 0.5rem 0;">Código: {{ d.codigo_dispositivo }}</p>
+      <p style="color: #666; margin: 0.5rem 0;">Tipo: {{ d.tipo }}</p>
+      <p style="color: #666; margin: 0.5rem 0;">Sede: {{ d.sede }}</p>
+      <p style="color: #999; font-size: 0.8rem; margin: 0.5rem 0;">Última conexión: {{ d.ultima_conexion | date:'dd/MM/yyyy HH:mm' }}</p>
+      <button (click)="activarTimbre(d.id)" style="background: #43e97b; color: white; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; margin-top: 0.5rem;">🔔 Activar Timbre</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Instituciones - Sistema de Timbres</title>
+    <style>
+        body { font-family: Arial; margin: 0; padding: 20px; background: #f0f2f5; }
+        .navbar { background: #2c3e50; color: white; padding: 15px; margin-bottom: 20px; }
+        .navbar a { color: white; text-decoration: none; margin-right: 20px; }
+        .navbar a:hover { text-decoration: underline; }
+        .content { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🎵 Sistema de Control de Timbres</h1>
+        <div>
+            <a href="{% url 'timbre:dashboard' %}">Dashboard</a> |
+            <a href="{% url 'timbre:dispositivos' %}">Dispositivos</a> |
+            <a href="{% url 'timbre:horarios' %}">Horarios</a> |
+            <a href="{% url 'timbre:eventos' %}">Eventos</a> |
+            <a href="{% url 'timbre:sedes' %}">Sedes</a> |
+            <a href="{% url 'timbre:instituciones' %}">Instituciones</a> |
+            <a href="{% url 'timbre:notificaciones' %}">Notificaciones</a> |
+            <a href="{% url 'timbre:comandos' %}">Comandos</a>
+        </div>
+    </div>
+    <div class="content">
+        <h1>Instituciones</h1>
+        <table>
+            <thead>
+                <tr><th>Nombre</th><th>RUC</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+                {% for i in instituciones %}
+                <tr>
+                    <td>{{ i.nombre }}</td>
+                    <td>{{ i.ruc|default:'No registrado' }}</td>
+                    <td>
+                        <a href="#">Ver sedes</a>  <!-- Podrías enlazar a sedes filtradas -->
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3">No hay instituciones registradas.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

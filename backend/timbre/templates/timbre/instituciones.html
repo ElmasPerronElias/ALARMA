@@ -1,0 +1,13 @@
+﻿<!DOCTYPE html>
+<html>
+<head><title>Instituciones</title></head>
+<body>
+    <h1>Instituciones</h1>
+    <ul>
+    {% for i in instituciones %}
+        <li>{{ i.nombre }} - RUC: {{ i.ruc|default:'No registrado' }}</li>
+    {% endfor %}
+    </ul>
+    <a href='/'>Volver</a>
+</body>
+</html>

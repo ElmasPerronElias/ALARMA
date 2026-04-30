@@ -1,0 +1,20 @@
+<div style="padding: 2rem;">
+  <h1 style="color: #2c3e50; margin-bottom: 2rem;">⏰ Horarios Escolares</h1>
+  
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 1.5rem;">
+    <div *ngFor="let h of horarios" style="background: white; border-radius: 15px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      <h3 style="color: #667eea; margin: 0 0 0.5rem 0;">{{ h.nombre }}</h3>
+      <p style="color: #666;">Sede: {{ h.sede }}</p>
+      <p style="color: #666;">Tipo: {{ h.tipo_jornada }}</p>
+      <p style="color: #666;">Vigencia: {{ h.fecha_inicio }} al {{ h.fecha_fin }}</p>
+      <details>
+        <summary style="color: #667eea; cursor: pointer; margin-top: 0.5rem;">Ver eventos ({{ h.eventos_count }})</summary>
+        <div style="margin-top: 0.5rem;">
+          <div *ngFor="let e of h.eventos" style="padding: 0.25rem; border-left: 3px solid #667eea; margin: 0.5rem 0; padding-left: 0.5rem;">
+            {{ e.nombre }} - {{ e.dia_semana }} {{ e.hora_inicio }} ({{ e.duracion_segundos }}s)
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+﻿<!DOCTYPE html>
+<html>
+<head><title>Notificaciones</title></head>
+<body>
+    <h1>Mis Notificaciones</h1>
+    <ul>
+    {% for n in notificaciones %}
+        <li>{{ n.titulo }} - {{ n.mensaje }} ({{ n.fecha_creacion|date:"d/m/Y H:i" }})</li>
+    {% endfor %}
+    </ul>
+    <a href='/'>Volver</a>
+</body>
+</html>

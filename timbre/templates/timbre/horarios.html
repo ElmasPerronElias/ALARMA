@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Horarios - Sistema de Timbres</title>
+    <style>
+        body { font-family: Arial; margin: 0; padding: 20px; background: #f0f2f5; }
+        .navbar { background: #2c3e50; color: white; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .nav-links a { color: white; text-decoration: none; margin-right: 20px; }
+        .nav-links a:hover { text-decoration: underline; }
+        .content { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f8f9fa; }
+        .btn { display: inline-block; padding: 5px 10px; margin: 2px; border-radius: 4px; text-decoration: none; }
+        .btn-warning { background: #f39c12; color: white; }
+        .btn-danger { background: #e74c3c; color: white; }
+        .btn-flotante {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #28a745;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transition: 0.3s;
+        }
+        .btn-flotante:hover { background-color: #218838; transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>🎵 Sistema de Control de Timbres</h1>
+        <div class="nav-links">
+            <a href="{% url 'timbre:dashboard' %}">Dashboard</a> |
+            <a href="{% url 'timbre:dispositivos' %}">Dispositivos</a> |
+            <a href="{% url 'timbre:horarios' %}">Horarios</a> |
+            <a href="{% url 'timbre:eventos' %}">Eventos</a> |
+            <a href="{% url 'timbre:sedes' %}">Sedes</a> |
+            <a href="{% url 'timbre:instituciones' %}">Instituciones</a> |
+            <a href="{% url 'timbre:notificaciones' %}">Notificaciones</a> |
+            <a href="{% url 'timbre:comandos' %}">Comandos</a>
+        </div>
+    </div>
+    <div class="content">
+        <h1>Gestión de Horarios Escolares</h1>
+        <table>
+            <thead>
+                <tr><th>Nombre</th><th>Sede</th><th>Jornada</th><th>Activo</th><th>Acciones</th></tr>
+            </thead>
+            <tbody>
+                {% for h in horarios %}
+                <tr>
+                    <td>{{ h.nombre }}</td>
+                    <td>{{ h.sede.nombre }}</td>
+                    <td>{{ h.get_tipo_jornada_display }}</td>
+                    <td>{% if h.activo %}✅ Sí{% else %}❌ No{% endif %}</td>
+                    <td>
+                        <a href="{% url 'timbre:horario_edit' h.id %}" class="btn btn-warning">✏️ Editar</a>
+                        <a href="{% url 'timbre:horario_delete' h.id %}" class="btn btn-danger">🗑️ Eliminar</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5">No hay horarios registrados. ¡Agrega uno!{% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="{% url 'timbre:horario_create' %}" class="btn-flotante">➕ Agregar Horario</a>
+</body>
+</html>

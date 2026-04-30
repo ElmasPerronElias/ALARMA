@@ -1,0 +1,13 @@
+<div style="padding: 2rem;">
+  <h1 style="color: #2c3e50; margin-bottom: 2rem;">🏫 Sedes</h1>
+  
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
+    <div *ngFor="let s of sedes" style="background: white; border-radius: 15px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      <h3 style="color: #667eea; margin: 0;">{{ s.nombre }}</h3>
+      <p style="color: #666; margin: 0.5rem 0;">Código: {{ s.codigo }}</p>
+      <p style="color: #666; margin: 0.5rem 0;">Institución: {{ s.institucion }}</p>
+      <p style="color: #666; margin: 0.5rem 0;">Dirección: {{ s.direccion }}</p>
+      <p style="color: #666; margin: 0.5rem 0;">Teléfono: {{ s.telefono }}</p>
+    </div>
+  </div>
+</div>

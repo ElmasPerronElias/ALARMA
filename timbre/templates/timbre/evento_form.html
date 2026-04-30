@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ titulo }} - Eventos</title>
+    <style>
+        body { font-family: Arial; background: #f0f2f5; margin: 0; padding: 20px; }
+        .container { max-width: 600px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; }
+        .form-control { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { background: #2ecc71; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
+        .cancelar { background: #95a5a6; margin-left: 10px; text-decoration: none; padding: 10px 15px; border-radius: 4px; color: white; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>{{ titulo }}</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div style="color: red;">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit">💾 Guardar</button>
+            <a href="{% url 'timbre:eventos' %}" class="cancelar">❌ Cancelar</a>
+        </form>
+    </div>
+</body>
+</html>
