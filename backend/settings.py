@@ -125,3 +125,9 @@ CORS_ALLOW_CREDENTIALS = True
 
 # Usar modelo de usuario personalizado
 AUTH_USER_MODEL = 'timbre.Usuario'
+
+# Docker
+WEB = 'web'
+WEB_HOST = 'gunicorn'
+WEB_PORT = 8000
+WEB_WORKER = 4
