@@ -52,6 +52,23 @@ export interface Activacion {
   estado: string;
 }
 
+export interface LoginRequest {
+  username: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+  password2: string;
+}
+
+export interface TokenResponse {
+  access: string;
+  refresh: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -88,5 +105,14 @@ export class ApiService {
   // Activar timbre manualmente
   activarTimbre(dispositivoId: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/activar-timbre/`, { dispositivo_id: dispositivoId });
+  }
+
+  // Autenticación
+  login(credentials: LoginRequest): Observable<TokenResponse> {
+    return this.http.post<TokenResponse>(`${this.apiUrl}/token/`, credentials);
+  }
+
+  register(userData: RegisterRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register/`, userData);
   }
 }

@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f4f6fb;
+}
+
+.main-nav {
+  background: linear-gradient(135deg, #4c67d5 0%, #6e3ba4 100%);
+  padding: 1rem 2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.main-nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  transition: background 0.25s ease;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+  background: rgba(255,255,255,0.15);
+}

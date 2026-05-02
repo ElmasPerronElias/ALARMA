@@ -9,7 +9,12 @@ urlpatterns = [
     path('api/dispositivos/', views.api_dispositivos_list, name='api_dispositivos'),
     path('api/horarios/', views.api_horarios_list, name='api_horarios'),
     path('api/sedes/', views.api_sedes_list, name='api_sedes'),
+    path('api/register/', views.api_register, name='api_register'),
     
     # APIs para ESP32
     path('api/dispositivo/registro/', views.dispositivo_registro, name='api_registro'),
+    
+    # Vistas con templates
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('register/', views.register, name='register'),
 ]

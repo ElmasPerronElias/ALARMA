@@ -126,6 +126,9 @@ CORS_ALLOW_CREDENTIALS = True
 # Usar modelo de usuario personalizado
 AUTH_USER_MODEL = 'timbre.Usuario'
 
+# Redireccionar después del login
+LOGIN_REDIRECT_URL = '/dashboard/'
+
 # Docker
 WEB = 'web'
 WEB_HOST = 'gunicorn'
