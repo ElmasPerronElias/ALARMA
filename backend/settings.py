@@ -64,13 +64,13 @@ if RAILWAY:
     DEBUG = False
     ALLOWED_HOSTS = ['.up.railway.app', 'localhost', '127.0.0.1']
     
-    # Base de datos MySQL desde Railway (CORREGIDO)
+    # Base de datos MySQL con los nombres CORRECTOS de las variables
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': os.environ.get('MYSQL_DATABASE', 'railway'),
-            'USER': os.environ.get('MYSQLUSER', 'root'),
-            'PASSWORD': os.environ.get('MYSQL_ROOT_PASSWORD', ''),
+            'USER': os.environ.get('MYSQL_USER', 'root'),
+            'PASSWORD': os.environ.get('MYSQL_PASSWORD', ''),
             'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
             'PORT': os.environ.get('MYSQL_PORT', '3306'),
             'OPTIONS': {
