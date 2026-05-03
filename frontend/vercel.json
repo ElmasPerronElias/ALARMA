@@ -1,13 +1,4 @@
 {
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist/frontend/browser"
-      }
-    }
-  ],
   "buildCommand": "npm run build",
   "outputDirectory": "dist/frontend/browser",
   "installCommand": "npm install",
