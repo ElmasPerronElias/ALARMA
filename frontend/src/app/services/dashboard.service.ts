@@ -8,7 +8,7 @@ import { environment } from '../../environments/environment';
   selector: 'app-dashboard',
   standalone: true,  // ← IMPORTANTE
   imports: [CommonModule],  // ← Importa CommonModule
-  templateUrl: './dashboard.component.html',
+templateUrl: './dashboard/../dashboard.component.html',  // Dos niveles arriba
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {

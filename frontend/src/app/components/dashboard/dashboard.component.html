@@ -1,37 +1,27 @@
-<div style="padding: 2rem; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-  <h1 style="color: #2c3e50; margin-bottom: 2rem;">📊 Dashboard - Sistema de Timbres</h1>
+<div style="padding: 20px; font-family: Arial;">
+  <h1>🏫 Sistema de Control de Timbres</h1>
   
-  <!-- Tarjetas de estadísticas -->
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem; border-radius: 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-      <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📟</div>
-      <h3 style="margin: 0; font-size: 1rem; opacity: 0.9;">Dispositivos</h3>
-      <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem;">{{ dispositivos.length }}</div>
+  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 20px 0;">
+    <div style="background: #667eea; color: white; padding: 20px; border-radius: 10px;">
+      <h3>Dispositivos</h3>
+      <h1>{{ datos?.total_dispositivos || 0 }}</h1>
     </div>
-    
-    <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 1.5rem; border-radius: 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-      <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏫</div>
-      <h3 style="margin: 0; font-size: 1rem; opacity: 0.9;">Sedes</h3>
-      <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem;">{{ sedes.length }}</div>
+    <div style="background: #764ba2; color: white; padding: 20px; border-radius: 10px;">
+      <h3>Sedes</h3>
+      <h1>{{ datos?.total_sedes || 0 }}</h1>
     </div>
-    
-    <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 1.5rem; border-radius: 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-      <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🏛️</div>
-      <h3 style="margin: 0; font-size: 1rem; opacity: 0.9;">Instituciones</h3>
-      <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem;">{{ instituciones.length }}</div>
+    <div style="background: #f093fb; color: white; padding: 20px; border-radius: 10px;">
+      <h3>Usuarios</h3>
+      <h1>{{ datos?.total_usuarios || 0 }}</h1>
     </div>
-    
-    <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 1.5rem; border-radius: 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-      <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">⏰</div>
-      <h3 style="margin: 0; font-size: 1rem; opacity: 0.9;">Eventos Hoy</h3>
-      <div style="font-size: 2rem; font-weight: bold; margin-top: 0.5rem;">{{ eventos.length }}</div>
+    <div style="background: #4facfe; color: white; padding: 20px; border-radius: 10px;">
+      <h3>Eventos Hoy</h3>
+      <h1>{{ datos?.eventos_hoy || 0 }}</h1>
     </div>
   </div>
-  
-  <!-- Navegación a otras páginas -->
-  <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
-    <a routerLink="/dispositivos" style="background: #667eea; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none;">📟 Ver Dispositivos</a>
-    <a routerLink="/sedes" style="background: #f093fb; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none;">🏫 Ver Sedes</a>
-    <a routerLink="/horarios" style="background: #4facfe; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none;">⏰ Ver Horarios</a>
+
+  <div style="background: #f0f2f5; padding: 20px; border-radius: 10px;">
+    <h3>📊 Estado del Sistema</h3>
+    <p>{{ backendStatus }}</p>
   </div>
 </div>
