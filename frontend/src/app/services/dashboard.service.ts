@@ -1,25 +1,36 @@
-// dashboard.component.ts
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
-@Component({
-  selector: 'app-dashboard',
-  standalone: true,  // ← IMPORTANTE
-  imports: [CommonModule],  // ← Importa CommonModule
-templateUrl: './dashboard/../dashboard.component.html',  // Dos niveles arriba
-  styleUrls: ['./dashboard.component.css']
+@Injectable({
+  providedIn: 'root'
 })
-export class DashboardComponent implements OnInit {
-  datos: any = {};
+export class DashboardService {
   private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
-  ngOnInit() {
-    this.http.get(`${this.apiUrl}/dashboard/`).subscribe(data => {
-      this.datos = data;
-    });
+  getDashboard() {
+    return this.http.get(`${this.apiUrl}/dashboard/`);
+  }
+
+  getDispositivos() {
+    return this.http.get(`${this.apiUrl}/dispositivos/`);
+  }
+
+  getSedes() {
+    return this.http.get(`${this.apiUrl}/sedes/`);
+  }
+
+  getHorarios() {
+    return this.http.get(`${this.apiUrl}/horarios/`);
+  }
+
+  getInstituciones() {
+    return this.http.get(`${this.apiUrl}/instituciones/`);
+  }
+
+  getNotificaciones() {
+    return this.http.get(`${this.apiUrl}/notificaciones/`);
   }
 }
