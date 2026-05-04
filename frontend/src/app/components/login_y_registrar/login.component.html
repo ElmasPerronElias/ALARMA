@@ -10,19 +10,23 @@
       <div class="form-group">
         <label for="username">Usuario</label>
         <input type="text" id="username" formControlName="username" placeholder="Ingresa tu usuario">
-        <small *ngIf="username?.touched && username?.hasError('required')" class="field-error">El usuario es obligatorio.</small>
+        <small *ngIf="loginForm.get('username')?.touched && loginForm.get('username')?.hasError('required')" class="field-error">
+          El usuario es obligatorio.
+        </small>
       </div>
 
       <div class="form-group">
-        <label for="password">Contraseña</label>
-        <input type="password" id="password" formControlName="password" placeholder="Ingresa tu contraseña">
-        <small *ngIf="password?.touched && password?.hasError('required')" class="field-error">La contraseña es obligatoria.</small>
+        <label for="password">ContraseÃ±a</label>
+        <input type="password" id="password" formControlName="password" placeholder="Ingresa tu contraseÃ±a">
+        <small *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')" class="field-error">
+          La contraseÃ±a es obligatoria.
+        </small>
       </div>
 
-      <button type="submit" [disabled]="loginForm.invalid">Iniciar sesión</button>
+      <button type="submit" [disabled]="loginForm.invalid">Iniciar sesiÃ³n</button>
     </form>
 
     <div *ngIf="errorMessage" class="message error">{{ errorMessage }}</div>
-    <p class="auth-footer">¿No tienes cuenta? <a routerLink="/registro">Regístrate</a></p>
+    <p class="auth-footer">Â¿No tienes cuenta? <a routerLink="/registro">RegÃ­strate</a></p>
   </div>
 </div>

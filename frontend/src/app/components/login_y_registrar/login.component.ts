@@ -1,24 +1,24 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { ApiService, LoginRequest } from '../../services/api.service';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent {  // ← Asegura que dice "export class LoginComponent"
   loginForm: FormGroup;
   errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
-    private apiService: ApiService,
-    private router: Router
+    private router: Router,
+    private apiService: ApiService
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
@@ -26,30 +26,18 @@ export class LoginComponent {
     });
   }
 
-  get username() {
-    return this.loginForm.get('username');
-  }
-
-  get password() {
-    return this.loginForm.get('password');
-  }
-
   onSubmit() {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
-      this.errorMessage = 'Por favor completa el formulario correctamente.';
       return;
     }
 
-    const credentials: LoginRequest = this.loginForm.value;
-    this.apiService.login(credentials).subscribe({
-      next: (response) => {
-        localStorage.setItem('access_token', response.access);
-        localStorage.setItem('refresh_token', response.refresh);
+    this.apiService.login(this.loginForm.value).subscribe({
+      next: () => {
         this.router.navigate(['/dashboard']);
       },
-      error: (error) => {
-        this.errorMessage = error.error?.detail || 'Credenciales inválidas';
+      error: (err) => {
+        this.errorMessage = err.error?.detail || 'Credenciales inválidas';
       }
     });
   }

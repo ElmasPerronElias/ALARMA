@@ -3,42 +3,42 @@
     <div class="auth-header">
       <div class="auth-badge">REGISTRO</div>
       <h2>Crea tu cuenta</h2>
-      <p>Regístrate para usar el panel de timbres y administrar tus sedes.</p>
+      <p>RegÃ­strate para usar el panel de timbres y administrar tus sedes.</p>
     </div>
 
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+    <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="auth-form">
       <div class="form-group">
         <label for="username">Usuario</label>
         <input type="text" id="username" formControlName="username" placeholder="Nombre de usuario">
-        <small *ngIf="username?.touched && username?.hasError('required')" class="field-error">El usuario es obligatorio.</small>
+        <small *ngIf="registroForm.get('username')?.touched && registroForm.get('username')?.hasError('required')" class="field-error">El usuario es obligatorio.</small>
       </div>
 
       <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" formControlName="email" placeholder="Correo electrónico">
-        <small *ngIf="email?.touched && email?.hasError('required')" class="field-error">El email es obligatorio.</small>
-        <small *ngIf="email?.touched && email?.hasError('email')" class="field-error">El email no es válido.</small>
+        <input type="email" id="email" formControlName="email" placeholder="Correo electrÃ³nico">
+        <small *ngIf="registroForm.get('email')?.touched && registroForm.get('email')?.hasError('required')" class="field-error">El email es obligatorio.</small>
+        <small *ngIf="registroForm.get('email')?.touched && registroForm.get('email')?.hasError('email')" class="field-error">El email no es vÃ¡lido.</small>
       </div>
 
       <div class="form-group">
-        <label for="password">Contraseña</label>
-        <input type="password" id="password" formControlName="password" placeholder="Contraseña">
-        <small *ngIf="password?.touched && password?.hasError('required')" class="field-error">La contraseña es obligatoria.</small>
-        <small *ngIf="password?.touched && password?.hasError('minlength')" class="field-error">Debe tener al menos 6 caracteres.</small>
+        <label for="password">ContraseÃ±a</label>
+        <input type="password" id="password" formControlName="password" placeholder="ContraseÃ±a">
+        <small *ngIf="registroForm.get('password')?.touched && registroForm.get('password')?.hasError('required')" class="field-error">La contraseÃ±a es obligatoria.</small>
+        <small *ngIf="registroForm.get('password')?.touched && registroForm.get('password')?.hasError('minlength')" class="field-error">Debe tener al menos 6 caracteres.</small>
       </div>
 
       <div class="form-group">
-        <label for="password2">Confirmar contraseña</label>
-        <input type="password" id="password2" formControlName="password2" placeholder="Repite la contraseña">
-        <small *ngIf="password2?.touched && password2?.hasError('required')" class="field-error">Confirma tu contraseña.</small>
-        <small *ngIf="registerForm.touched && registerForm.errors?.['mismatch']" class="field-error">Las contraseñas no coinciden.</small>
+        <label for="password2">Confirmar contraseÃ±a</label>
+        <input type="password" id="password2" formControlName="password2" placeholder="Repite la contraseÃ±a">
+        <small *ngIf="registroForm.get('password2')?.touched && registroForm.get('password2')?.hasError('required')" class="field-error">Confirma tu contraseÃ±a.</small>
+        <small *ngIf="registroForm.touched && registroForm.errors?.['mismatch']" class="field-error">Las contraseÃ±as no coinciden.</small>
       </div>
 
-      <button type="submit" [disabled]="registerForm.invalid">Registrarse</button>
+      <button type="submit" [disabled]="registroForm.invalid">Registrarse</button>
     </form>
 
     <div *ngIf="errorMessage" class="message error">{{ errorMessage }}</div>
     <div *ngIf="successMessage" class="message success">{{ successMessage }}</div>
-    <p class="auth-footer">¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a></p>
+    <p class="auth-footer">Â¿Ya tienes cuenta? <a routerLink="/login">Inicia sesiÃ³n</a></p>
   </div>
 </div>

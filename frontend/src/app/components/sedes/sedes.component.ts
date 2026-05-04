@@ -12,9 +12,21 @@ import { ApiService } from '../../services/api.service';
 export class SedesComponent implements OnInit {
   sedes: any[] = [];
 
-  constructor(private api: ApiService) {}
+  constructor(private apiService: ApiService) {}
 
   ngOnInit() {
-    this.api.getSedes().subscribe(data => this.sedes = data);
+    this.cargarSedes();
+  }
+
+  cargarSedes() {
+    this.apiService.getSedes().subscribe({
+      next: (response: any) => {
+        console.log('Sedes recibidas:', response);
+        this.sedes = response.sedes || [];
+      },
+      error: (err) => {
+        console.error('Error al cargar sedes:', err);
+      }
+    });
   }
 }

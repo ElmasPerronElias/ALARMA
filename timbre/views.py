@@ -1,21 +1,24 @@
-# views.py - Elimina @login_required de las APIs
-
+import json
+from django.utils import timezone
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
 from .models import (
     Institucion, Sede, Usuario, Dispositivo,
     HorarioEscolar, EventoHorario, ActivacionTimbre
 )
 
+# Usar el modelo de usuario personalizado
+User = get_user_model()
+
+
 # ============================================
-# API PARA ANGULAR - SIN AUTENTICACIÓN (por ahora)
+# API PARA ANGULAR - SIN AUTENTICACIÓN
 # ============================================
 
-# Elimina @login_required de estas funciones
 def api_dashboard(request):
     """API para datos del dashboard"""
     data = {
@@ -98,7 +101,14 @@ def api_register(request):
         if User.objects.filter(email=email).exists():
             return JsonResponse({'error': 'El email ya está registrado'}, status=400)
 
-        user = User.objects.create_user(username=username, email=email, password=password)
+        # Crear usuario con el modelo personalizado
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password,
+            numero_documento=data.get('numero_documento', '00000000')
+        )
+        
         return JsonResponse({'message': 'Usuario registrado exitosamente'})
 
     except Exception as e:
@@ -148,7 +158,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 
 @login_required
-def dashboard(request):
+def dashboard_view(request):
     """Vista del dashboard principal"""
     context = {
         'total_dispositivos': Dispositivo.objects.filter(activo=True).count(),
@@ -162,7 +172,8 @@ def dashboard(request):
     }
     return render(request, 'timbre/dashboard.html', context)
 
-def register(request):
+
+def register_view(request):
     """Vista para registro de usuarios"""
     if request.method == 'POST':
         form = UserCreationForm(request.POST)

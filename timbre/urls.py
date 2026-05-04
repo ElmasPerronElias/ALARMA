@@ -4,7 +4,7 @@ from . import views
 app_name = 'timbre'
 
 urlpatterns = [
-    # API para Angular (sin autenticación)
+    # API para Angular
     path('api/dashboard/', views.api_dashboard, name='api_dashboard'),
     path('api/dispositivos/', views.api_dispositivos_list, name='api_dispositivos'),
     path('api/horarios/', views.api_horarios_list, name='api_horarios'),
@@ -15,6 +15,6 @@ urlpatterns = [
     path('api/dispositivo/registro/', views.dispositivo_registro, name='api_registro'),
     
     # Vistas con templates
-    path('dashboard/', views.dashboard, name='dashboard'),
-    path('register/', views.register, name='register'),
+    path('dashboard/', views.dashboard_view, name='dashboard'),
+    path('register/', views.register_view, name='register'),
 ]

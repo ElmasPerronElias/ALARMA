@@ -1,27 +1,16 @@
-<div style="padding: 20px; font-family: Arial;">
-  <h1>🏫 Sistema de Control de Timbres</h1>
+<div style="padding: 2rem;">
+  <h1>Sistema de Control de Timbres</h1>
   
-  <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin: 20px 0;">
-    <div style="background: #667eea; color: white; padding: 20px; border-radius: 10px;">
+  <div style="display: flex; gap: 1rem; margin: 2rem 0;">
+    <div style="background: #667eea; padding: 1rem; border-radius: 10px;">
       <h3>Dispositivos</h3>
-      <h1>{{ datos?.total_dispositivos || 0 }}</h1>
+      <p>{{ datos.total_dispositivos || 0 }}</p>
     </div>
-    <div style="background: #764ba2; color: white; padding: 20px; border-radius: 10px;">
+    <div style="background: #f093fb; padding: 1rem; border-radius: 10px;">
       <h3>Sedes</h3>
-      <h1>{{ datos?.total_sedes || 0 }}</h1>
-    </div>
-    <div style="background: #f093fb; color: white; padding: 20px; border-radius: 10px;">
-      <h3>Usuarios</h3>
-      <h1>{{ datos?.total_usuarios || 0 }}</h1>
-    </div>
-    <div style="background: #4facfe; color: white; padding: 20px; border-radius: 10px;">
-      <h3>Eventos Hoy</h3>
-      <h1>{{ datos?.eventos_hoy || 0 }}</h1>
+      <p>{{ datos.total_sedes || 0 }}</p>
     </div>
   </div>
-
-  <div style="background: #f0f2f5; padding: 20px; border-radius: 10px;">
-    <h3>📊 Estado del Sistema</h3>
-    <p>{{ backendStatus }}</p>
-  </div>
-</div>
+    
+  <p>Estado: {{ backendStatus }}</p>
+</div> 
