@@ -68,115 +68,79 @@ export interface EventoHorario {
   orden: number;
 }
 
-// ========== CRUD SERVICE ==========
+// ========== CRUD SERVICE OPTIMIZADO ==========
 @Injectable({ providedIn: 'root' })
 export class CrudService {
   private apiUrl = environment.apiUrl;
 
+  // Mapeo de endpoints
+  private endpoints = {
+    instituciones: '/instituciones/',
+    sedes: '/sedes/',
+    dispositivos: '/dispositivos/',
+    horariosEscolares: '/horarios-escolares/',
+    eventosHorario: '/eventos-horario/'
+  };
+
   constructor(private http: HttpClient) {}
 
+  // Método genérico para GET (todos)
+  private getAll<T>(endpoint: string): Observable<T[]> {
+    return this.http.get<T[]>(`${this.apiUrl}${endpoint}`);
+  }
+
+  // Método genérico para GET (uno)
+  private getOne<T>(endpoint: string, id: number): Observable<T> {
+    return this.http.get<T>(`${this.apiUrl}${endpoint}${id}/`);
+  }
+
+  // Método genérico para POST
+  private create<T>(endpoint: string, data: any): Observable<T> {
+    return this.http.post<T>(`${this.apiUrl}${endpoint}`, data);
+  }
+
+  // Método genérico para PUT
+  private update<T>(endpoint: string, id: number, data: any): Observable<T> {
+    return this.http.put<T>(`${this.apiUrl}${endpoint}${id}/`, data);
+  }
+
+  // Método genérico para DELETE
+  private delete(endpoint: string, id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}${endpoint}${id}/`);
+  }
+
   // ========== INSTITUCIONES ==========
-  getInstituciones(): Observable<Institucion[]> {
-    return this.http.get<Institucion[]>(`${this.apiUrl}/instituciones/`);
-  }
-
-  getInstitucion(id: number): Observable<Institucion> {
-    return this.http.get<Institucion>(`${this.apiUrl}/instituciones/${id}/`);
-  }
-
-  createInstitucion(data: Institucion): Observable<Institucion> {
-    return this.http.post<Institucion>(`${this.apiUrl}/instituciones/`, data);
-  }
-
-  updateInstitucion(id: number, data: Institucion): Observable<Institucion> {
-    return this.http.put<Institucion>(`${this.apiUrl}/instituciones/${id}/`, data);
-  }
-
-  deleteInstitucion(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/instituciones/${id}/`);
-  }
+  getInstituciones = () => this.getAll<Institucion>(this.endpoints.instituciones);
+  getInstitucion = (id: number) => this.getOne<Institucion>(this.endpoints.instituciones, id);
+  createInstitucion = (data: Institucion) => this.create<Institucion>(this.endpoints.instituciones, data);
+  updateInstitucion = (id: number, data: Institucion) => this.update<Institucion>(this.endpoints.instituciones, id, data);
+  deleteInstitucion = (id: number) => this.delete(this.endpoints.instituciones, id);
 
   // ========== SEDES ==========
-  getSedes(): Observable<Sede[]> {
-    return this.http.get<Sede[]>(`${this.apiUrl}/sedes/`);
-  }
-
-  getSede(id: number): Observable<Sede> {
-    return this.http.get<Sede>(`${this.apiUrl}/sedes/${id}/`);
-  }
-
-  createSede(data: Sede): Observable<Sede> {
-    return this.http.post<Sede>(`${this.apiUrl}/sedes/`, data);
-  }
-
-  updateSede(id: number, data: Sede): Observable<Sede> {
-    return this.http.put<Sede>(`${this.apiUrl}/sedes/${id}/`, data);
-  }
-
-  deleteSede(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/sedes/${id}/`);
-  }
+  getSedes = () => this.getAll<Sede>(this.endpoints.sedes);
+  getSede = (id: number) => this.getOne<Sede>(this.endpoints.sedes, id);
+  createSede = (data: Sede) => this.create<Sede>(this.endpoints.sedes, data);
+  updateSede = (id: number, data: Sede) => this.update<Sede>(this.endpoints.sedes, id, data);
+  deleteSede = (id: number) => this.delete(this.endpoints.sedes, id);
 
   // ========== DISPOSITIVOS ==========
-  getDispositivos(): Observable<Dispositivo[]> {
-    return this.http.get<Dispositivo[]>(`${this.apiUrl}/dispositivos/`);
-  }
-
-  getDispositivo(id: number): Observable<Dispositivo> {
-    return this.http.get<Dispositivo>(`${this.apiUrl}/dispositivos/${id}/`);
-  }
-
-  createDispositivo(data: Dispositivo): Observable<Dispositivo> {
-    return this.http.post<Dispositivo>(`${this.apiUrl}/dispositivos/`, data);
-  }
-
-  updateDispositivo(id: number, data: Dispositivo): Observable<Dispositivo> {
-    return this.http.put<Dispositivo>(`${this.apiUrl}/dispositivos/${id}/`, data);
-  }
-
-  deleteDispositivo(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/dispositivos/${id}/`);
-  }
+  getDispositivos = () => this.getAll<Dispositivo>(this.endpoints.dispositivos);
+  getDispositivo = (id: number) => this.getOne<Dispositivo>(this.endpoints.dispositivos, id);
+  createDispositivo = (data: Dispositivo) => this.create<Dispositivo>(this.endpoints.dispositivos, data);
+  updateDispositivo = (id: number, data: Dispositivo) => this.update<Dispositivo>(this.endpoints.dispositivos, id, data);
+  deleteDispositivo = (id: number) => this.delete(this.endpoints.dispositivos, id);
 
   // ========== HORARIOS ESCOLARES ==========
-  getHorariosEscolares(): Observable<HorarioEscolar[]> {
-    return this.http.get<HorarioEscolar[]>(`${this.apiUrl}/horarios-escolares/`);
-  }
-
-  getHorarioEscolar(id: number): Observable<HorarioEscolar> {
-    return this.http.get<HorarioEscolar>(`${this.apiUrl}/horarios-escolares/${id}/`);
-  }
-
-  createHorarioEscolar(data: HorarioEscolar): Observable<HorarioEscolar> {
-    return this.http.post<HorarioEscolar>(`${this.apiUrl}/horarios-escolares/`, data);
-  }
-
-  updateHorarioEscolar(id: number, data: HorarioEscolar): Observable<HorarioEscolar> {
-    return this.http.put<HorarioEscolar>(`${this.apiUrl}/horarios-escolares/${id}/`, data);
-  }
-
-  deleteHorarioEscolar(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/horarios-escolares/${id}/`);
-  }
+  getHorariosEscolares = () => this.getAll<HorarioEscolar>(this.endpoints.horariosEscolares);
+  getHorarioEscolar = (id: number) => this.getOne<HorarioEscolar>(this.endpoints.horariosEscolares, id);
+  createHorarioEscolar = (data: HorarioEscolar) => this.create<HorarioEscolar>(this.endpoints.horariosEscolares, data);
+  updateHorarioEscolar = (id: number, data: HorarioEscolar) => this.update<HorarioEscolar>(this.endpoints.horariosEscolares, id, data);
+  deleteHorarioEscolar = (id: number) => this.delete(this.endpoints.horariosEscolares, id);
 
   // ========== EVENTOS HORARIO ==========
-  getEventosHorario(): Observable<EventoHorario[]> {
-    return this.http.get<EventoHorario[]>(`${this.apiUrl}/eventos-horario/`);
-  }
-
-  getEventoHorario(id: number): Observable<EventoHorario> {
-    return this.http.get<EventoHorario>(`${this.apiUrl}/eventos-horario/${id}/`);
-  }
-
-  createEventoHorario(data: EventoHorario): Observable<EventoHorario> {
-    return this.http.post<EventoHorario>(`${this.apiUrl}/eventos-horario/`, data);
-  }
-
-  updateEventoHorario(id: number, data: EventoHorario): Observable<EventoHorario> {
-    return this.http.put<EventoHorario>(`${this.apiUrl}/eventos-horario/${id}/`, data);
-  }
-
-  deleteEventoHorario(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/eventos-horario/${id}/`);
-  }
+  getEventosHorario = () => this.getAll<EventoHorario>(this.endpoints.eventosHorario);
+  getEventoHorario = (id: number) => this.getOne<EventoHorario>(this.endpoints.eventosHorario, id);
+  createEventoHorario = (data: EventoHorario) => this.create<EventoHorario>(this.endpoints.eventosHorario, data);
+  updateEventoHorario = (id: number, data: EventoHorario) => this.update<EventoHorario>(this.endpoints.eventosHorario, id, data);
+  deleteEventoHorario = (id: number) => this.delete(this.endpoints.eventosHorario, id);
 }
