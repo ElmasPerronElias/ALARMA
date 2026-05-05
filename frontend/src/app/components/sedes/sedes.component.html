@@ -1,13 +1,52 @@
-<div style="padding: 2rem;">
-  <h1 style="color: #2c3e50; margin-bottom: 2rem;">🏫 Sedes</h1>
-  
-  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 1.5rem;">
-    <div *ngFor="let s of sedes" style="background: white; border-radius: 15px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-      <h3 style="color: #667eea; margin: 0;">{{ s.nombre }}</h3>
-      <p style="color: #666; margin: 0.5rem 0;">Código: {{ s.codigo }}</p>
-      <p style="color: #666; margin: 0.5rem 0;">Institución: {{ s.institucion }}</p>
-      <p style="color: #666; margin: 0.5rem 0;">Dirección: {{ s.direccion }}</p>
-      <p style="color: #666; margin: 0.5rem 0;">Teléfono: {{ s.telefono }}</p>
+<div class="crud-container">
+  <div class="crud-header">
+    <h1>🏫 Sedes</h1>
+    <button class="btn-primary" (click)="abrirModal()">+ Nueva Sede</button>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" placeholder="🔍 Buscar por nombre, código o institución..." [(ngModel)]="searchTerm">
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Cargando...</div>
+
+  <div *ngIf="!isLoading" class="crud-table">
+    <table>
+      <thead><tr><th>ID</th><th>Nombre</th><th>Código</th><th>Institución</th><th>Dirección</th><th>Estado</th><th>Acciones</th></thead>
+      <tbody>
+        <tr *ngFor="let item of sedesFiltradas">
+          <td>{{ item.id }}</td>
+          <td><strong>{{ item.nombre }}</strong></td>
+          <td>{{ item.codigo }}</td>
+          <td><span class="badge-institucion">{{ item.institucion_nombre }}</span></td>
+          <td>{{ item.direccion | slice:0:30 }}{{ item.direccion.length > 30 ? '...' : '' }}</td>
+          <td><span class="badge" [class.active]="item.activo">{{ item.activo ? 'Activo' : 'Inactivo' }}</span></td>
+          <td class="actions">
+            <button class="btn-edit" (click)="abrirModal(true, item)">✏️</button>
+            <button class="btn-delete" (click)="eliminar(item.id!)">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" [class.show]="showModal">
+    <div class="modal-content">
+      <h3>{{ editando ? 'Editar' : 'Nueva' }} Sede</h3>
+      <select [(ngModel)]="formData.institucion" class="form-input">
+        <option [value]="0">Seleccione institución</option>
+        <option *ngFor="let i of instituciones" [value]="i.id">{{ i.nombre }}</option>
+      </select>
+      <input [(ngModel)]="formData.nombre" placeholder="Nombre de la sede *" class="form-input">
+      <input [(ngModel)]="formData.codigo" placeholder="Código de sede *" class="form-input">
+      <textarea [(ngModel)]="formData.direccion" placeholder="Dirección *" class="form-input"></textarea>
+      <input [(ngModel)]="formData.telefono" placeholder="Teléfono" class="form-input">
+      <label class="checkbox-label"><input type="checkbox" [(ngModel)]="formData.activo"> Activo</label>
+      <div class="modal-buttons">
+        <button class="btn-primary" (click)="guardar()">Guardar</button>
+        <button class="btn-secondary" (click)="cerrarModal()">Cancelar</button>
+      </div>
     </div>
   </div>
 </div>

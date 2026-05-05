@@ -1,16 +1,74 @@
-<div style="padding: 2rem;">
-  <h1>Sistema de Control de Timbres</h1>
-  
-  <div style="display: flex; gap: 1rem; margin: 2rem 0;">
-    <div style="background: #667eea; padding: 1rem; border-radius: 10px;">
-      <h3>Dispositivos</h3>
-      <p>{{ datos.total_dispositivos || 0 }}</p>
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div>
+      <h1 class="dashboard-title">📊 Panel de Control</h1>
+      <p class="dashboard-subtitle">Sistema de Control de Timbres</p>
     </div>
-    <div style="background: #f093fb; padding: 1rem; border-radius: 10px;">
-      <h3>Sedes</h3>
-      <p>{{ datos.total_sedes || 0 }}</p>
+    <div class="status-badge" [class.connected]="backendStatus === '✅ Conectado'">
+      {{ backendStatus }}
     </div>
   </div>
-    
-  <p>Estado: {{ backendStatus }}</p>
-</div> 
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Cargando datos...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage && !isLoading" class="error-card">
+    <p>⚠️ Error de conexión: {{ errorMessage }}</p>
+    <button (click)="cargarDashboard()">🔄 Reintentar</button>
+  </div>
+
+  <!-- Stats Cards -->
+  <div *ngIf="!isLoading && !errorMessage" class="stats-grid">
+    <div class="stat-card stat-dispositivos">
+      <div class="stat-icon">📟</div>
+      <div class="stat-info">
+        <h3>Dispositivos</h3>
+        <p class="stat-number">{{ datos.total_dispositivos || 0 }}</p>
+        <span class="stat-label">Total registrados</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-sedes">
+      <div class="stat-icon">🏫</div>
+      <div class="stat-info">
+        <h3>Sedes</h3>
+        <p class="stat-number">{{ datos.total_sedes || 0 }}</p>
+        <span class="stat-label">Activas</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-usuarios">
+      <div class="stat-icon">👥</div>
+      <div class="stat-info">
+        <h3>Usuarios</h3>
+        <p class="stat-number">{{ datos.total_usuarios || 0 }}</p>
+        <span class="stat-label">Registrados</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-eventos">
+      <div class="stat-icon">⏰</div>
+      <div class="stat-info">
+        <h3>Eventos Hoy</h3>
+        <p class="stat-number">{{ datos.eventos_hoy || 0 }}</p>
+        <span class="stat-label">Programados</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions -->
+  <div *ngIf="!isLoading && !errorMessage" class="actions-section">
+    <h2>⚡ Acciones Rápidas</h2>
+    <div class="actions-grid">
+      <a routerLink="/instituciones" class="action-btn">🏛️ Gestionar Instituciones</a>
+      <a routerLink="/sedes" class="action-btn">🏫 Gestionar Sedes</a>
+      <a routerLink="/dispositivos" class="action-btn">📟 Gestionar Dispositivos</a>
+      <a routerLink="/horarios" class="action-btn">⏰ Gestionar Horarios</a>
+    </div>
+  </div>
+</div>

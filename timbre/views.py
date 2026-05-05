@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 
 from .models import (
     Institucion, Sede, Usuario, Dispositivo,
-    HorarioEscolar, EventoHorario, ActivacionTimbre
+    HorarioEscolar, EventoHorario, ActivacionTimbre, EstadoDispositivo
 )
 
 # Usar el modelo de usuario personalizado
@@ -113,6 +113,251 @@ def api_register(request):
 
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+
+# ============================================
+# ========== CRUD COMPLETO ==========
+# ============================================
+
+# ---------- INSTITUCIONES ----------
+@csrf_exempt
+def institucion_list(request):
+    """Listar todas las instituciones o crear una nueva"""
+    if request.method == 'GET':
+        instituciones = Institucion.objects.all()
+        data = []
+        for i in instituciones:
+            data.append({
+                'id': i.id,
+                'nombre': i.nombre,
+                'ruc': i.ruc,
+                'telefono': i.telefono,
+                'email': i.email,
+                'direccion': i.direccion,
+                'activo': i.activo,
+                'fecha_registro': i.fecha_registro,
+            })
+        return JsonResponse(data, safe=False)
+    
+    elif request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            institucion = Institucion.objects.create(
+                nombre=data['nombre'],
+                ruc=data.get('ruc', ''),
+                telefono=data.get('telefono', ''),
+                email=data.get('email', ''),
+                direccion=data.get('direccion', ''),
+                activo=data.get('activo', True)
+            )
+            return JsonResponse({'id': institucion.id, 'message': 'Institución creada exitosamente'}, status=201)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+
+@csrf_exempt
+def institucion_detail(request, pk):
+    """Obtener, actualizar o eliminar una institución específica"""
+    try:
+        institucion = Institucion.objects.get(pk=pk)
+    except Institucion.DoesNotExist:
+        return JsonResponse({'error': 'Institución no encontrada'}, status=404)
+
+    if request.method == 'GET':
+        data = {
+            'id': institucion.id,
+            'nombre': institucion.nombre,
+            'ruc': institucion.ruc,
+            'telefono': institucion.telefono,
+            'email': institucion.email,
+            'direccion': institucion.direccion,
+            'activo': institucion.activo,
+            'fecha_registro': institucion.fecha_registro,
+        }
+        return JsonResponse(data)
+
+    elif request.method == 'PUT':
+        try:
+            data = json.loads(request.body)
+            institucion.nombre = data.get('nombre', institucion.nombre)
+            institucion.ruc = data.get('ruc', institucion.ruc)
+            institucion.telefono = data.get('telefono', institucion.telefono)
+            institucion.email = data.get('email', institucion.email)
+            institucion.direccion = data.get('direccion', institucion.direccion)
+            institucion.activo = data.get('activo', institucion.activo)
+            institucion.save()
+            return JsonResponse({'message': 'Institución actualizada exitosamente'})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    elif request.method == 'DELETE':
+        institucion.delete()
+        return JsonResponse({'message': 'Institución eliminada exitosamente'})
+
+
+# ---------- SEDES ----------
+@csrf_exempt
+def sede_list(request):
+    """Listar todas las sedes o crear una nueva"""
+    if request.method == 'GET':
+        sedes = Sede.objects.all()
+        data = []
+        for s in sedes:
+            data.append({
+                'id': s.id,
+                'nombre': s.nombre,
+                'codigo': s.codigo,
+                'institucion': s.institucion.id,
+                'institucion_nombre': s.institucion.nombre,
+                'direccion': s.direccion,
+                'telefono': s.telefono,
+                'activo': s.activo,
+            })
+        return JsonResponse(data, safe=False)
+    
+    elif request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            institucion = Institucion.objects.get(id=data['institucion'])
+            sede = Sede.objects.create(
+                institucion=institucion,
+                nombre=data['nombre'],
+                codigo=data['codigo'],
+                direccion=data['direccion'],
+                telefono=data.get('telefono', ''),
+                activo=data.get('activo', True)
+            )
+            return JsonResponse({'id': sede.id, 'message': 'Sede creada exitosamente'}, status=201)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+
+@csrf_exempt
+def sede_detail(request, pk):
+    """Obtener, actualizar o eliminar una sede específica"""
+    try:
+        sede = Sede.objects.get(pk=pk)
+    except Sede.DoesNotExist:
+        return JsonResponse({'error': 'Sede no encontrada'}, status=404)
+
+    if request.method == 'GET':
+        data = {
+            'id': sede.id,
+            'nombre': sede.nombre,
+            'codigo': sede.codigo,
+            'institucion': sede.institucion.id,
+            'institucion_nombre': sede.institucion.nombre,
+            'direccion': sede.direccion,
+            'telefono': sede.telefono,
+            'activo': sede.activo,
+        }
+        return JsonResponse(data)
+
+    elif request.method == 'PUT':
+        try:
+            data = json.loads(request.body)
+            sede.nombre = data.get('nombre', sede.nombre)
+            sede.codigo = data.get('codigo', sede.codigo)
+            sede.direccion = data.get('direccion', sede.direccion)
+            sede.telefono = data.get('telefono', sede.telefono)
+            sede.activo = data.get('activo', sede.activo)
+            if 'institucion' in data:
+                sede.institucion = Institucion.objects.get(id=data['institucion'])
+            sede.save()
+            return JsonResponse({'message': 'Sede actualizada exitosamente'})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    elif request.method == 'DELETE':
+        sede.delete()
+        return JsonResponse({'message': 'Sede eliminada exitosamente'})
+
+
+# ---------- DISPOSITIVOS ----------
+@csrf_exempt
+def dispositivo_list(request):
+    """Listar todos los dispositivos o crear uno nuevo"""
+    if request.method == 'GET':
+        dispositivos = Dispositivo.objects.all()
+        data = []
+        for d in dispositivos:
+            # Obtener estado por defecto si no tiene
+            estado = d.estado
+            if not estado:
+                estado = EstadoDispositivo.objects.first()
+            data.append({
+                'id': d.id,
+                'nombre': d.nombre,
+                'codigo_dispositivo': d.codigo_dispositivo,
+                'tipo': d.tipo,
+                'sede': d.sede.id,
+                'sede_nombre': d.sede.nombre,
+                'estado': estado.id if estado else None,
+                'ip_address': d.ip_address,
+                'activo': d.activo,
+            })
+        return JsonResponse(data, safe=False)
+    
+    elif request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            sede = Sede.objects.get(id=data['sede'])
+            dispositivo = Dispositivo.objects.create(
+                sede=sede,
+                nombre=data['nombre'],
+                codigo_dispositivo=data['codigo_dispositivo'],
+                tipo=data.get('tipo', 'ESP32'),
+                ip_address=data.get('ip_address', ''),
+                activo=data.get('activo', True)
+            )
+            return JsonResponse({'id': dispositivo.id, 'message': 'Dispositivo creado exitosamente'}, status=201)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+
+@csrf_exempt
+def dispositivo_detail(request, pk):
+    """Obtener, actualizar o eliminar un dispositivo específico"""
+    try:
+        dispositivo = Dispositivo.objects.get(pk=pk)
+    except Dispositivo.DoesNotExist:
+        return JsonResponse({'error': 'Dispositivo no encontrado'}, status=404)
+
+    if request.method == 'GET':
+        estado = dispositivo.estado
+        if not estado:
+            estado = EstadoDispositivo.objects.first()
+        data = {
+            'id': dispositivo.id,
+            'nombre': dispositivo.nombre,
+            'codigo_dispositivo': dispositivo.codigo_dispositivo,
+            'tipo': dispositivo.tipo,
+            'sede': dispositivo.sede.id,
+            'sede_nombre': dispositivo.sede.nombre,
+            'estado': estado.id if estado else None,
+            'ip_address': dispositivo.ip_address,
+            'activo': dispositivo.activo,
+        }
+        return JsonResponse(data)
+
+    elif request.method == 'PUT':
+        try:
+            data = json.loads(request.body)
+            dispositivo.nombre = data.get('nombre', dispositivo.nombre)
+            dispositivo.codigo_dispositivo = data.get('codigo_dispositivo', dispositivo.codigo_dispositivo)
+            dispositivo.tipo = data.get('tipo', dispositivo.tipo)
+            dispositivo.ip_address = data.get('ip_address', dispositivo.ip_address)
+            dispositivo.activo = data.get('activo', dispositivo.activo)
+            if 'sede' in data:
+                dispositivo.sede = Sede.objects.get(id=data['sede'])
+            dispositivo.save()
+            return JsonResponse({'message': 'Dispositivo actualizado exitosamente'})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    elif request.method == 'DELETE':
+        dispositivo.delete()
+        return JsonResponse({'message': 'Dispositivo eliminado exitosamente'})
 
 
 # ============================================

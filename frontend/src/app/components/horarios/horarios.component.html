@@ -1,20 +1,56 @@
-<div style="padding: 2rem;">
-  <h1 style="color: #2c3e50; margin-bottom: 2rem;">⏰ Horarios Escolares</h1>
-  
-  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 1.5rem;">
-    <div *ngFor="let h of horarios" style="background: white; border-radius: 15px; padding: 1.5rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-      <h3 style="color: #667eea; margin: 0 0 0.5rem 0;">{{ h.nombre }}</h3>
-      <p style="color: #666;">Sede: {{ h.sede }}</p>
-      <p style="color: #666;">Tipo: {{ h.tipo_jornada }}</p>
-      <p style="color: #666;">Vigencia: {{ h.fecha_inicio }} al {{ h.fecha_fin }}</p>
-      <details>
-        <summary style="color: #667eea; cursor: pointer; margin-top: 0.5rem;">Ver eventos ({{ h.eventos_count }})</summary>
-        <div style="margin-top: 0.5rem;">
-          <div *ngFor="let e of h.eventos" style="padding: 0.25rem; border-left: 3px solid #667eea; margin: 0.5rem 0; padding-left: 0.5rem;">
-            {{ e.nombre }} - {{ e.dia_semana }} {{ e.hora_inicio }} ({{ e.duracion_segundos }}s)
-          </div>
-        </div>
-      </details>
+<div class="crud-container">
+  <div class="crud-header">
+    <h1>⏰ Horarios Escolares</h1>
+    <button class="btn-primary" (click)="abrirModal()">+ Nuevo Horario</button>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" placeholder="🔍 Buscar por nombre o sede..." [(ngModel)]="searchTerm">
+  </div>
+
+  <div *ngIf="isLoading" class="loading">Cargando...</div>
+
+  <div *ngIf="!isLoading" class="crud-table">
+    <table>
+      <thead><tr><th>ID</th><th>Nombre</th><th>Sede</th><th>Jornada</th><th>Fecha Inicio</th><th>Fecha Fin</th><th>Estado</th><th>Acciones</th></thead>
+      <tbody>
+        <tr *ngFor="let item of horariosFiltrados">
+          <td>{{ item.id }}</td>
+          <td><strong>{{ item.nombre }}</strong></td>
+          <td>{{ item.sede_nombre || '-' }}</td>
+          <td><span class="badge-jornada">{{ getJornadaLabel(item.tipo_jornada) }}</span></td>
+          <td>{{ item.fecha_inicio | date:'dd/MM/yyyy' }}</td>
+          <td>{{ item.fecha_fin | date:'dd/MM/yyyy' }}</td>
+          <td><span class="badge" [class.active]="item.activo">{{ item.activo ? 'Activo' : 'Inactivo' }}</span></td>
+          <td class="actions">
+            <button class="btn-edit" (click)="abrirModal(true, item)">✏️</button>
+            <button class="btn-delete" (click)="eliminar(item.id!)">🗑️</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" [class.show]="showModal">
+    <div class="modal-content">
+      <h3>{{ editando ? 'Editar' : 'Nuevo' }} Horario Escolar</h3>
+      <select [(ngModel)]="formData.sede" class="form-input">
+        <option [value]="0">Seleccione sede</option>
+        <option *ngFor="let s of sedes" [value]="s.id">{{ s.nombre }}</option>
+      </select>
+      <input [(ngModel)]="formData.nombre" placeholder="Nombre del horario *" class="form-input">
+      <select [(ngModel)]="formData.tipo_jornada" class="form-input">
+        <option *ngFor="let j of jornadas" [value]="j.value">{{ j.label }}</option>
+      </select>
+      <input type="date" [(ngModel)]="formData.fecha_inicio" class="form-input">
+      <input type="date" [(ngModel)]="formData.fecha_fin" class="form-input">
+      <textarea [(ngModel)]="formData.descripcion" placeholder="Descripción" class="form-input"></textarea>
+      <label class="checkbox-label"><input type="checkbox" [(ngModel)]="formData.activo"> Activo</label>
+      <div class="modal-buttons">
+        <button class="btn-primary" (click)="guardar()">Guardar</button>
+        <button class="btn-secondary" (click)="cerrarModal()">Cancelar</button>
+      </div>
     </div>
   </div>
 </div>

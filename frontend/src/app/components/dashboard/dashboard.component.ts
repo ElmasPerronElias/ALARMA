@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../environments/environment local';
+import { environment } from '../../../environments/environment';
 import { timeout, catchError } from 'rxjs/operators';
-import { throwError, of } from 'rxjs';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,34 +15,36 @@ import { throwError, of } from 'rxjs';
 export class DashboardComponent implements OnInit {
   datos: any = {};
   backendStatus: string = 'Conectando...';
-  errorDetalle: string = '';
+  ultimasActivaciones: any[] = [];
+  isLoading: boolean = true;
+  errorMessage: string = '';
 
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
+    this.cargarDashboard();
+  }
+
+  cargarDashboard() {
+    this.isLoading = true;
     const url = `${environment.apiUrl}/dashboard/`;
-    console.log('URL a conectar:', url);
     
     this.http.get(url)
       .pipe(
-        timeout(10000), // 10 segundos de espera máxima
+        timeout(15000),
         catchError((err) => {
-          console.error('Error completo:', err);
-          this.backendStatus = '❌ Error de conexión';
-          if (err.name === 'TimeoutError') {
-            this.errorDetalle = 'El servidor no responde (timeout)';
-          } else {
-            this.errorDetalle = err.message;
-          }
-          return of(null); // Retorna observable vacío para evitar error
+          this.isLoading = false;
+          this.backendStatus = '❌ Error';
+          this.errorMessage = err.message;
+          return of(null);
         })
       )
       .subscribe({
-        next: (data) => {
+        next: (data: any) => {
           if (data) {
-            console.log('Datos recibidos:', data);
             this.datos = data;
             this.backendStatus = '✅ Conectado';
+            this.isLoading = false;
           }
         }
       });
