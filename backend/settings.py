@@ -50,11 +50,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 # ========== BASE DE DATOS ==========
-# Detectar Railway por variable de entorno
 RAILWAY = os.environ.get('RAILWAY_ENVIRONMENT') is not None
 
 if RAILWAY:
-    # Configuración para Railway (MySQL)
     DEBUG = False
     ALLOWED_HOSTS = ['.up.railway.app', 'localhost', '127.0.0.1']
     DATABASES = {
@@ -72,7 +70,6 @@ if RAILWAY:
         }
     }
 else:
-    # Configuración local (SQLite)
     DEBUG = True
     ALLOWED_HOSTS = []
     DATABASES = {
@@ -97,11 +94,14 @@ USE_TZ = True
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# ========== CORS ==========
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',
     'http://127.0.0.1:4200',
+    'https://alarma-production.up.railway.app',
 ]
 CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True  # Solo para pruebas en Railway
 
 AUTH_USER_MODEL = 'timbre.Usuario'
 LOGIN_REDIRECT_URL = '/dashboard/'
