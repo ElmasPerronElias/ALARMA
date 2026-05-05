@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../../services/api.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -11,14 +12,15 @@ import { ApiService } from '../../services/api.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {  // ← Asegura que dice "export class LoginComponent"
+export class LoginComponent {
   loginForm: FormGroup;
   errorMessage: string = '';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private apiService: ApiService
+    private http: HttpClient
   ) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
@@ -32,8 +34,9 @@ export class LoginComponent {  // ← Asegura que dice "export class LoginCompon
       return;
     }
 
-    this.apiService.login(this.loginForm.value).subscribe({
-      next: () => {
+    this.http.post(`${this.apiUrl}/token/`, this.loginForm.value).subscribe({
+      next: (response: any) => {
+        localStorage.setItem('access_token', response.access);
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {

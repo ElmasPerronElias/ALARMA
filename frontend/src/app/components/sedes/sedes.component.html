@@ -12,7 +12,11 @@
 
   <div *ngIf="!isLoading" class="crud-table">
     <table>
-      <thead><tr><th>ID</th><th>Nombre</th><th>Código</th><th>Institución</th><th>Dirección</th><th>Estado</th><th>Acciones</th></thead>
+      <thead>
+        <tr>
+          <th>ID</th><th>Nombre</th><th>Código</th><th>Institución</th><th>Dirección</th><th>Teléfono</th><th>Estado</th><th>Acciones</th>
+        </tr>
+      </thead>
       <tbody>
         <tr *ngFor="let item of sedesFiltradas">
           <td>{{ item.id }}</td>
@@ -20,6 +24,7 @@
           <td>{{ item.codigo }}</td>
           <td><span class="badge-institucion">{{ item.institucion_nombre }}</span></td>
           <td>{{ item.direccion | slice:0:30 }}{{ item.direccion.length > 30 ? '...' : '' }}</td>
+          <td>{{ item.telefono || '-' }}</td>
           <td><span class="badge" [class.active]="item.activo">{{ item.activo ? 'Activo' : 'Inactivo' }}</span></td>
           <td class="actions">
             <button class="btn-edit" (click)="abrirModal(true, item)">✏️</button>
@@ -34,15 +39,34 @@
   <div class="modal" [class.show]="showModal">
     <div class="modal-content">
       <h3>{{ editando ? 'Editar' : 'Nueva' }} Sede</h3>
+      
       <select [(ngModel)]="formData.institucion" class="form-input">
-        <option [value]="0">Seleccione institución</option>
+        <option [value]="0">Seleccione institución *</option>
         <option *ngFor="let i of instituciones" [value]="i.id">{{ i.nombre }}</option>
       </select>
+      
       <input [(ngModel)]="formData.nombre" placeholder="Nombre de la sede *" class="form-input">
       <input [(ngModel)]="formData.codigo" placeholder="Código de sede *" class="form-input">
       <textarea [(ngModel)]="formData.direccion" placeholder="Dirección *" class="form-input"></textarea>
       <input [(ngModel)]="formData.telefono" placeholder="Teléfono" class="form-input">
-      <label class="checkbox-label"><input type="checkbox" [(ngModel)]="formData.activo"> Activo</label>
+      
+      <div style="display: flex; gap: 1rem;">
+        <input [(ngModel)]="formData.latitud" placeholder="Latitud" class="form-input" type="number" step="any">
+        <input [(ngModel)]="formData.longitud" placeholder="Longitud" class="form-input" type="number" step="any">
+      </div>
+      
+      <select [(ngModel)]="formData.zona_horaria" class="form-input">
+        <option value="America/Lima">Lima (UTC-5)</option>
+        <option value="America/Bogota">Bogotá (UTC-5)</option>
+        <option value="America/Mexico_City">Ciudad de México (UTC-6)</option>
+        <option value="America/Santiago">Santiago (UTC-3)</option>
+        <option value="America/Buenos_Aires">Buenos Aires (UTC-3)</option>
+      </select>
+      
+      <label class="checkbox-label">
+        <input type="checkbox" [(ngModel)]="formData.activo"> Activo
+      </label>
+      
       <div class="modal-buttons">
         <button class="btn-primary" (click)="guardar()">Guardar</button>
         <button class="btn-secondary" (click)="cerrarModal()">Cancelar</button>

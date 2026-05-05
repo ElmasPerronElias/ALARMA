@@ -71,4 +71,7 @@
       <a routerLink="/horarios" class="action-btn">⏰ Gestionar Horarios</a>
     </div>
   </div>
+  <div *ngIf="isLoading" class="loading-container">
+  <div class="spinner"></div>
+</div>
 </div>
