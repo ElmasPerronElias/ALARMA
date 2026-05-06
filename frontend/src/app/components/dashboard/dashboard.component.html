@@ -1,77 +1,151 @@
 <div class="dashboard-container">
-  <!-- Header -->
+  <!-- Header Moderno -->
   <div class="dashboard-header">
-    <div>
-      <h1 class="dashboard-title">📊 Panel de Control</h1>
-      <p class="dashboard-subtitle">Sistema de Control de Timbres</p>
-    </div>
-    <div class="status-badge" [class.connected]="backendStatus === '✅ Conectado'">
-      {{ backendStatus }}
-    </div>
-  </div>
-
-  <!-- Loading -->
-  <div *ngIf="isLoading" class="loading-container">
-    <div class="spinner"></div>
-    <p>Cargando datos...</p>
-  </div>
-
-  <!-- Error -->
-  <div *ngIf="errorMessage && !isLoading" class="error-card">
-    <p>⚠️ Error de conexión: {{ errorMessage }}</p>
-    <button (click)="cargarDashboard()">🔄 Reintentar</button>
-  </div>
-
-  <!-- Stats Cards -->
-  <div *ngIf="!isLoading && !errorMessage" class="stats-grid">
-    <div class="stat-card stat-dispositivos">
-      <div class="stat-icon">📟</div>
-      <div class="stat-info">
-        <h3>Dispositivos</h3>
-        <p class="stat-number">{{ datos.total_dispositivos || 0 }}</p>
-        <span class="stat-label">Total registrados</span>
+    <div class="header-left">
+      <div class="logo-container">
+        <div class="logo-icon">🎵</div>
+        <div class="logo-text">
+          <h1>Control de Timbres</h1>
+          <p>Sistema Integral de Gestión</p>
+        </div>
       </div>
     </div>
-
-    <div class="stat-card stat-sedes">
-      <div class="stat-icon">🏫</div>
-      <div class="stat-info">
-        <h3>Sedes</h3>
-        <p class="stat-number">{{ datos.total_sedes || 0 }}</p>
-        <span class="stat-label">Activas</span>
+    <div class="header-right">
+      <div class="status-chip" [class.connected]="backendStatus === '✅ Conectado'">
+        <span class="status-dot"></span>
+        {{ backendStatus }}
       </div>
-    </div>
-
-    <div class="stat-card stat-usuarios">
-      <div class="stat-icon">👥</div>
-      <div class="stat-info">
-        <h3>Usuarios</h3>
-        <p class="stat-number">{{ datos.total_usuarios || 0 }}</p>
-        <span class="stat-label">Registrados</span>
-      </div>
-    </div>
-
-    <div class="stat-card stat-eventos">
-      <div class="stat-icon">⏰</div>
-      <div class="stat-info">
-        <h3>Eventos Hoy</h3>
-        <p class="stat-number">{{ datos.eventos_hoy || 0 }}</p>
-        <span class="stat-label">Programados</span>
+      <div class="user-menu">
+        <img src="https://ui-avatars.com/api/?background=667eea&color=fff&rounded=true" alt="User" class="user-avatar">
       </div>
     </div>
   </div>
 
-  <!-- Quick Actions -->
-  <div *ngIf="!isLoading && !errorMessage" class="actions-section">
-    <h2>⚡ Acciones Rápidas</h2>
-    <div class="actions-grid">
-      <a routerLink="/instituciones" class="action-btn">🏛️ Gestionar Instituciones</a>
-      <a routerLink="/sedes" class="action-btn">🏫 Gestionar Sedes</a>
-      <a routerLink="/dispositivos" class="action-btn">📟 Gestionar Dispositivos</a>
-      <a routerLink="/horarios" class="action-btn">⏰ Gestionar Horarios</a>
+  <!-- Loading Overlay -->
+  <div *ngIf="isLoading" class="loading-overlay">
+    <div class="loader">
+      <div class="loader-ring"></div>
+      <p>Cargando datos...</p>
     </div>
   </div>
-  <div *ngIf="isLoading" class="loading-container">
-  <div class="spinner"></div>
-</div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage && !isLoading" class="error-state">
+    <div class="error-card">
+      <div class="error-icon">⚠️</div>
+      <h3>Error de conexión</h3>
+      <p>{{ errorMessage }}</p>
+      <button class="btn-primary" (click)="cargarDashboard()">
+        <span>🔄</span> Reintentar
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading && !errorMessage" class="main-content">
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-icon-wrapper">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+              📟
+            </div>
+          </div>
+          <div class="stat-details">
+            <span class="stat-label">Dispositivos</span>
+            <div class="stat-value">{{ datos.total_dispositivos || 0 }}</div>
+            <span class="stat-trend">Total registrados</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-icon-wrapper">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+              🏫
+            </div>
+          </div>
+          <div class="stat-details">
+            <span class="stat-label">Sedes</span>
+            <div class="stat-value">{{ datos.total_sedes || 0 }}</div>
+            <span class="stat-trend">Activas</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-icon-wrapper">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+              👥
+            </div>
+          </div>
+          <div class="stat-details">
+            <span class="stat-label">Usuarios</span>
+            <div class="stat-value">{{ datos.total_usuarios || 0 }}</div>
+            <span class="stat-trend">Registrados</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-card-inner">
+          <div class="stat-icon-wrapper">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+              ⏰
+            </div>
+          </div>
+          <div class="stat-details">
+            <span class="stat-label">Eventos Hoy</span>
+            <div class="stat-value">{{ datos.eventos_hoy || 0 }}</div>
+            <span class="stat-trend">Programados</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions Section -->
+    <div class="actions-section">
+      <div class="section-header">
+        <h2>Acciones Rápidas</h2>
+        <p>Gestiona los diferentes módulos del sistema</p>
+      </div>
+      <div class="actions-grid">
+        <a routerLink="/instituciones" class="action-card">
+          <div class="action-icon">🏛️</div>
+          <div class="action-info">
+            <h3>Instituciones</h3>
+            <p>Gestionar entidades</p>
+          </div>
+          <div class="action-arrow">→</div>
+        </a>
+        <a routerLink="/sedes" class="action-card">
+          <div class="action-icon">🏫</div>
+          <div class="action-info">
+            <h3>Sedes</h3>
+            <p>Administrar ubicaciones</p>
+          </div>
+          <div class="action-arrow">→</div>
+        </a>
+        <a routerLink="/dispositivos" class="action-card">
+          <div class="action-icon">📟</div>
+          <div class="action-info">
+            <h3>Dispositivos</h3>
+            <p>Configurar timbres</p>
+          </div>
+          <div class="action-arrow">→</div>
+        </a>
+        <a routerLink="/horarios" class="action-card">
+          <div class="action-icon">⏰</div>
+          <div class="action-info">
+            <h3>Horarios</h3>
+            <p>Programar eventos</p>
+          </div>
+          <div class="action-arrow">→</div>
+        </a>
+      </div>
+    </div>
+  </div>
 </div>

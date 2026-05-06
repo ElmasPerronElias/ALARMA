@@ -5,16 +5,29 @@
   </div>
 
   <div class="search-bar">
-    <input type="text" placeholder="🔍 Buscar por nombre o RUC..." [(ngModel)]="searchTerm">
+    <input 
+      type="text" 
+      placeholder="🔍 Buscar por nombre o RUC..." 
+      [(ngModel)]="searchTerm"
+    >
   </div>
 
-  <div *ngIf="isLoading" class="loading">Cargando...</div>
+  <div *ngIf="isLoading" class="loading">
+    <div class="spinner"></div>
+    <p>Cargando instituciones...</p>
+  </div>
 
   <div *ngIf="!isLoading" class="crud-table">
     <table>
       <thead>
         <tr>
-          <th>ID</th><th>Nombre</th><th>RUC</th><th>Teléfono</th><th>Email</th><th>Estado</th><th>Acciones</th>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>RUC</th>
+          <th>Teléfono</th>
+          <th>Email</th>
+          <th>Estado</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
@@ -24,10 +37,23 @@
           <td>{{ item.ruc || '-' }}</td>
           <td>{{ item.telefono || '-' }}</td>
           <td>{{ item.email || '-' }}</td>
-          <td><span class="badge" [class.active]="item.activo">{{ item.activo ? 'Activo' : 'Inactivo' }}</span></td>
+          <td>
+            <span class="badge" [class.active]="item.activo">
+              {{ item.activo ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
           <td class="actions">
-            <button class="btn-edit" (click)="abrirModal(true, item)">✏️</button>
-            <button class="btn-delete" (click)="eliminar(item.id!)">🗑️</button>
+            <button class="btn-edit" (click)="abrirModal(true, item)" title="Editar">
+              ✏️
+            </button>
+            <button class="btn-delete" (click)="eliminar(item.id!)" title="Eliminar">
+              🗑️
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="institucionesFiltradas.length === 0">
+          <td colspan="7" style="text-align: center; padding: 40px;">
+            No hay instituciones registradas
           </td>
         </tr>
       </tbody>
@@ -37,16 +63,48 @@
   <!-- Modal -->
   <div class="modal" [class.show]="showModal">
     <div class="modal-content">
-      <h3>{{ editando ? 'Editar' : 'Nueva' }} Institución</h3>
-      <input [(ngModel)]="formData.nombre" placeholder="Nombre *" class="form-input">
-      <input [(ngModel)]="formData.ruc" placeholder="RUC" class="form-input">
-      <input [(ngModel)]="formData.telefono" placeholder="Teléfono" class="form-input">
-      <input [(ngModel)]="formData.email" placeholder="Email" class="form-input">
-      <textarea [(ngModel)]="formData.direccion" placeholder="Dirección" class="form-input"></textarea>
-      <label class="checkbox-label"><input type="checkbox" [(ngModel)]="formData.activo"> Activo</label>
-      <div class="modal-buttons">
-        <button class="btn-primary" (click)="guardar()">Guardar</button>
+      <div class="modal-header">
+        <h3>{{ editando ? '✏️ Editar' : '➕ Nueva' }} Institución</h3>
+        <button class="modal-close" (click)="cerrarModal()">✖</button>
+      </div>
+      
+      <div class="modal-body">
+        <input 
+          [(ngModel)]="formData.nombre" 
+          placeholder="Nombre *" 
+          class="form-input"
+        >
+        <input 
+          [(ngModel)]="formData.ruc" 
+          placeholder="RUC" 
+          class="form-input"
+        >
+        <input 
+          [(ngModel)]="formData.telefono" 
+          placeholder="Teléfono" 
+          class="form-input"
+        >
+        <input 
+          [(ngModel)]="formData.email" 
+          placeholder="Email" 
+          type="email"
+          class="form-input"
+        >
+        <textarea 
+          [(ngModel)]="formData.direccion" 
+          placeholder="Dirección" 
+          class="form-input"
+          rows="3"
+        ></textarea>
+        
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="formData.activo"> Activo
+        </label>
+      </div>
+      
+      <div class="modal-footer">
         <button class="btn-secondary" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn-primary" (click)="guardar()">Guardar</button>
       </div>
     </div>
   </div>
